@@ -1,2 +1,9 @@
 # ignore properties file
 config.properties
+.idea/
+*.iml
+*.iws
+lib/
+out/
+target/
+pom.xml
