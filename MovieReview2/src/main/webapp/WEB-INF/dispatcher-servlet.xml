@@ -21,7 +21,7 @@
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 
-    <!--근데이게의미가있는건가?;;-->
+    <!--근데이게의미가있는건가?;-->
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

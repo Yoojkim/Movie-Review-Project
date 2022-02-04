@@ -1,7 +1,6 @@
 package domain;
 
 public class MemberDTO {
-    /*annotaion으로 제한 아직 안 함*/
     private Long id;
     private String email;
     private String password;

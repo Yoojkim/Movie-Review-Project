@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class MovieApi {
     private final RestTemplate restTemplate=new RestTemplate();
+    //client_id, secret 할당받은 거 넣어주기... 까먹음ㅎ
     private final String CLIENT_ID="";
     private final String CLIENT_SECRET="";
     private final String queryUrl = "https://openapi.naver.com/v1/search/movie.json?query={keyword}";
