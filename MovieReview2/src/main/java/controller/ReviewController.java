@@ -1,3 +1,4 @@
+/*
 package controller;
 
 import domain.ReviewDTO;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import service.ReviewService;
 
 
-/*모든 기능들은 로그인이 되어있을 때만 수행*/
+*/
+/*모든 기능들은 로그인이 되어있을 때만 수행*//*
+
 @RequestMapping("/reviews")
 @Controller
 public class ReviewController {
@@ -40,5 +43,5 @@ public class ReviewController {
 
     //내가 쓴 리뷰 조회 (이건 따로 구현할지 여부 파악...)
     //리뷰 좋아요 기능 -> 이건 후에 ...
-
 }
+*/

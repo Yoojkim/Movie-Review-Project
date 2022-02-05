@@ -12,17 +12,14 @@
 
     <mvc:annotation-driven/>
     <context:component-scan base-package="controller"/>
-    <context:component-scan base-package="domain"/>
-    <context:component-scan base-package="mapper"/>
-    <context:component-scan base-package="service"/>
     <context:component-scan base-package="swagger"/>
+    <context:component-scan base-package="util"/>
+    <context:component-scan base-package="interceptor"/> //필요한지 모르겠음
 
     <!--정적 자원 mapping-->
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
-
-    <!--근데이게의미가있는건가?;-->
-    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <mvc:resources mapping="/resources/**" location="/" /> //빨간줄
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"></property>
