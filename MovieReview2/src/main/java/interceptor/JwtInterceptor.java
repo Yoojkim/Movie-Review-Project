@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 /*
 * interceptor에서 client의 요청에서 token 확인
-*
 * + interceptor 처리할 path 따로 어디에 써주ㅓ야되는데 어디더라 기억이안난당..
 * */
 @Component

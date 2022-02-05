@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -68,8 +66,8 @@ public class Jwt {
 
     //0- access token, 1- refresh token
     //토큰 유효성 검증
-    //+ IOException 걍 자동추가 한 건데 뭔지 모르겠음 ... ㅎㅎ
-    public int isValid(String token, Integer flag) throws IOException {
+    //+ Exception 걍 자동추가 한 건데 뭔지 모르겠음 ... ㅎㅎ
+    public int isValid(String token, Integer flag) throws Exception {
         String authToken="";
         Map<String, Object> payloads=this.validateFormat(token,flag);
         String salt=memberMapper.getSalt(Long.valueOf(String.valueOf(payloads.get("id"))));
@@ -93,7 +91,8 @@ public class Jwt {
         }
         catch (ExpiredJwtException e1){
             //parsing 과정에서 만료된 토큰 Exception 처리됨
-            //예외처리 <-지금 이거 안 해서 빨간줄생김
+            //예외처리
+            throw new Exception("parsing 과정 에러");
         }
     }
 
