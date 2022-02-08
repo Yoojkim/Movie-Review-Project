@@ -12,10 +12,6 @@ import service.MemberService;
 
 import java.io.IOException;
 
-/*로그인, 회원가입, 회원 탈퇴, 로그아웃
-+비밀번호 찾기 구현...
-*/
-
 @RequestMapping("/member")
 @Controller
 public class MemberController {
@@ -35,16 +31,15 @@ public class MemberController {
         return new ResponseEntity(memberService.signUp(memberDTO),HttpStatus.OK);
     }
 
-    //로그아웃
-    //httpServeletRequest에서 header 꺼내서 여기서 dto 만들기 -> x
+    /* //로그아웃
     @RequestMapping(value="/logout",method=RequestMethod.POST)
     public ResponseEntity logOut() throws IOException {
         return new ResponseEntity(memberService.logOut(),HttpStatus.OK);
-    }
+    }*/
 
     //회원탈퇴
     @RequestMapping(value="/withdraw",method =RequestMethod.POST)
-    public ResponseEntity withDraw(){
+    public ResponseEntity withDraw() throws IOException {
         return new ResponseEntity(memberService.withdraw(), HttpStatus.OK);
     }
 
@@ -53,8 +48,4 @@ public class MemberController {
     public ResponseEntity refresh() throws Exception {
         return new ResponseEntity(memberService.refresh(),HttpStatus.OK);
     }
-
-    //비밀번호 찾기
-
-
 }

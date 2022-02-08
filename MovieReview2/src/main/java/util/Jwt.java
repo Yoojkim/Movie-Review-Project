@@ -27,6 +27,7 @@ public class Jwt {
 
     //sub(token 목적)- access/refresh
     public String createToken(Long id, String sub){
+        System.out.println("token:"+sub);
         String salt=memberMapper.getSalt(id);
 
         //header
@@ -41,14 +42,16 @@ public class Jwt {
 
         //token 만료 설정
         LocalDateTime time= LocalDateTime.now();
+        System.out.println("now:"+time);
 
         if(sub.equals("access")){
-            time.plusDays(1);
+            time=time.plusDays(1);
         }
         //sub가 "refresh"인 경우
         else{
-            time.plusDays(14);
+            time=time.plusDays(14);
         }
+        System.out.println("end:"+time);
 
         Instant instant = time.atZone(ZoneId.systemDefault()).toInstant();
         Date exp=Date.from(instant);
@@ -66,12 +69,12 @@ public class Jwt {
 
     //0- access token, 1- refresh token
     //토큰 유효성 검증
-    //+ Exception 걍 자동추가 한 건데 뭔지 모르겠음 ... ㅎㅎ
     public int isValid(String token, Integer flag) throws Exception {
         String authToken="";
         Map<String, Object> payloads=this.validateFormat(token,flag);
         String salt=memberMapper.getSalt(Long.valueOf(String.valueOf(payloads.get("id"))));
         String sub=String.valueOf(payloads.get("sub")); //object->String
+        System.out.println("sub:"+sub);
 
         //token String 가공 (Http Request 헤더에서 토큰 추출)
         if(token.startsWith("Bearer ")){

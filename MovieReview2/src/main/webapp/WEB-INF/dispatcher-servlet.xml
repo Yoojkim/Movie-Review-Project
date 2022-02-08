@@ -13,16 +13,29 @@
     <mvc:annotation-driven/>
     <context:component-scan base-package="controller"/>
     <context:component-scan base-package="swagger"/>
-    <context:component-scan base-package="util"/>
-    <context:component-scan base-package="interceptor"/> //필요한지 모르겠음
+    <context:component-scan base-package="interceptor"/>
 
-    <!--정적 자원 mapping-->
+    <!--swagger-->
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>
     <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
-    <mvc:resources mapping="/resources/**" location="/" /> //빨간줄
+    <mvc:resources mapping="/resources/**" location="views/" />
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/member/login"/>
+            <mvc:exclude-mapping path="/member/signup"/>
+            <mvc:exclude-mapping path="/v2/api-docs"/>
+            <mvc:exclude-mapping path="/swagger-resources/**"/>
+            <mvc:exclude-mapping path="/swagger-ui.html"/>
+            <mvc:exclude-mapping path="/webjars/**"/>
+            <bean id="interceptor" class="interceptor.JwtInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"></property>
         <property name="suffix" value=".jsp"></property>
     </bean>
+
 </beans>

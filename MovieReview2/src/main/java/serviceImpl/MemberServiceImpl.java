@@ -56,12 +56,12 @@ public class MemberServiceImpl implements MemberService {
     //MemberDTO-> 이메일, 이름, 비밀번호
     public BaseResponse signUp(MemberDTO memberDTO) throws Exception{
         //email 중복
-        if(!memberMapper.emailExist(memberDTO.getEmail())){
+        if(memberMapper.emailExist(memberDTO.getEmail())){
             throw new Exception("존재하는 이메일입니다.");
         }
 
         //닉네임 중복
-        if(!memberMapper.nickNameExist(memberDTO.getNickname())){
+        if(memberMapper.nickNameExist(memberDTO.getNickName())){
             throw new Exception("존재하는 닉네임입니다.");
         }
 
@@ -88,7 +88,7 @@ public class MemberServiceImpl implements MemberService {
     private Long getLoginId() throws IOException {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=req.getHeader(HttpHeaders.AUTHORIZATION);
-        Map<String, Object> payloads=jwt.validateFormat(token,0);
+        Map<String, Object> payloads=jwt.validateFormat(token,0); //accessToken
 
         //id 추출
         Long id=Long.valueOf(String.valueOf(payloads.get("id")));
@@ -96,22 +96,25 @@ public class MemberServiceImpl implements MemberService {
         return id;
     }
 
-    @Override
+/*    @Override
     public BaseResponse logOut() throws IOException {
         //jwt token의 salt와 db Member의 salt를 다르게 설정
         String salt=BCrypt.gensalt();
         memberMapper.setSalt(salt,this.getLoginId()); //id의 salt를 다르게 설정
         
         return new BaseResponse("로그아웃 완료",HttpStatus.OK);
-    }
-    
+    }*/
+
+    //탈퇴
     @Override
-    public BaseResponse withdraw() {
-        //구현 
-        return null;
+    public BaseResponse withdraw() throws IOException {
+        //현재 로그인한 아이디를 jwt 기반으로 확인한 후, 해당 회원을 탈퇴
+        Long id=this.getLoginId();
+        memberMapper.deleteMember(id);
+
+        return new BaseResponse("회원 탈퇴 완료",HttpStatus.OK);
     }
 
-    //refresh token header에서 꺼내는 거 해결
     //header -> access, refresh
     //db에 refresh token 저장해야하는지
     @Override

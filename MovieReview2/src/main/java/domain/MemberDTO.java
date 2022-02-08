@@ -4,7 +4,7 @@ public class MemberDTO {
     private Long id;
     private String email;
     private String password;
-    private String nickname;
+    private String nickName;
 
     public Long getId() {
         return id;
@@ -14,12 +14,12 @@ public class MemberDTO {
         this.id = id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getEmail() {

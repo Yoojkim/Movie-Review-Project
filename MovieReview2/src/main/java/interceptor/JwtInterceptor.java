@@ -9,10 +9,6 @@ import util.Jwt;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
-* interceptor에서 client의 요청에서 token 확인
-* + interceptor 처리할 path 따로 어디에 써주ㅓ야되는데 어디더라 기억이안난당..
-* */
 @Component
 public class JwtInterceptor extends HandlerInterceptorAdapter {
 
@@ -33,7 +29,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             }
             else{
                 //토큰이 없는 경우
-                throw new Exception("인증(access) 토큰이 존재하지 않습니다."); //다른 처리 고려!
+                throw new Exception("인증(access) 토큰이 존재하지 않습니다.");
             }
         }
     }
