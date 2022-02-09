@@ -121,7 +121,7 @@ public class MemberServiceImpl implements MemberService {
     public Map<String, String> refresh() throws Exception {
         //현재 jwt token
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String refreshToken=req.getHeader("refresh");
+        String refreshToken=req.getHeader(HttpHeaders.AUTHORIZATION);
         System.out.println("refresh: "+refreshToken);
         int state=jwt.isValid(refreshToken,1);
         if (state==1){
