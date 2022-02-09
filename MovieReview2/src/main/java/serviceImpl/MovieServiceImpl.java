@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import service.MovieService;
 
+
 @Service
 public class MovieServiceImpl implements MovieService {
 
@@ -14,7 +15,7 @@ public class MovieServiceImpl implements MovieService {
     private MovieApi movieApi;
 
     @Transactional(readOnly = true)
-    public MovieResponseDTO findByKeyword(String keyword){
+    public MovieResponseDTO findByKeyword(String keyword) throws Exception {
         return movieApi.requestMovie(keyword);
     }
 }

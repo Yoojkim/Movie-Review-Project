@@ -8,5 +8,6 @@
     <context:component-scan base-package="mapper"/>
     <context:component-scan base-package="util"/>
     <context:component-scan base-package="api"/>
+    <context:component-scan base-package="configuration"/>
 
 </beans>

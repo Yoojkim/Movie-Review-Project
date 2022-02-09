@@ -122,6 +122,7 @@ public class MemberServiceImpl implements MemberService {
         //현재 jwt token
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String refreshToken=req.getHeader("refresh");
+        System.out.println("refresh: "+refreshToken);
         int state=jwt.isValid(refreshToken,1);
         if (state==1){
             Map<String, String> token=new HashMap<>();

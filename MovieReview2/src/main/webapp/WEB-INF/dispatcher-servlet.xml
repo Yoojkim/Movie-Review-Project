@@ -14,6 +14,19 @@
     <context:component-scan base-package="controller"/>
     <context:component-scan base-package="swagger"/>
     <context:component-scan base-package="interceptor"/>
+    
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>test/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
 
     <!--swagger-->
     <mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/"/>

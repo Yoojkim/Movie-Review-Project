@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import service.MovieService;
-
 
 @Controller
 public class MovieController {
@@ -17,9 +17,9 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
+    @ResponseBody
     @RequestMapping(value="/movies/{keyword}", method = RequestMethod.GET)
-    public ResponseEntity getMovie(@PathVariable String keyword){
-        return new ResponseEntity(movieService.findByKeyword(keyword), HttpStatus.OK);
-        //body로 json형식 movieResponseDto 들어갔을 것
+    public MovieResponseDTO getMovie(@PathVariable String keyword) throws Exception {
+        return movieService.findByKeyword(keyword);
     }
 }

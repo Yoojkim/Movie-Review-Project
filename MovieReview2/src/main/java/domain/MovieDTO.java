@@ -1,3 +1,4 @@
+/*
 package domain;
 
 import java.util.Date;
@@ -10,7 +11,9 @@ public class MovieDTO {
     private Date pubDate;
     private String director;
     private String actor;
-    private float userRating; /*원 타입은 integer*/
+    private float userRating; */
+/*원 타입은 integer*//*
+
 
     public String getTitle() {
         return title;
@@ -76,3 +79,4 @@ public class MovieDTO {
         this.userRating = userRating;
     }
 }
+*/

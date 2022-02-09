@@ -109,6 +109,7 @@ public class Jwt {
         Map<String, Object> payloads=null;
         payloads=new ObjectMapper().readValue(payloadStr,Map.class);
 
+        System.out.println(payloads);
         return payloads;
     }
 
