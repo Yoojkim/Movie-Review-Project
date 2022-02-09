@@ -1,6 +1,6 @@
-/*
 package controller;
 
+import domain.Movie;
 import domain.ReviewDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import service.ReviewService;
 
 
-*/
-/*모든 기능들은 로그인이 되어있을 때만 수행*//*
-
 @RequestMapping("/reviews")
 @Controller
 public class ReviewController {
@@ -25,23 +22,25 @@ public class ReviewController {
 
     //리뷰 작성
     @RequestMapping(value="/write",method= RequestMethod.POST)
-    public ResponseEntity createReview(@RequestParam ReviewDTO reviewDTO){
-        return ResponseEntity(reviewService.createReview(reviewDTO), HttpStatus.OK);
+    public ResponseEntity createReview(Movie movie, String review) throws Exception {
+        return new ResponseEntity(reviewService.createReview(movie,review), HttpStatus.OK);
     }
 
-    //특정 영화 리뷰 조회 (리스트로 반환)
-    @RequestMapping(value="/movie/{id}",method = RequestMethod.GET)
-    public ResponseEntity getMovieReviews(@PathVariable Long id){
-        return ResponseEntity(reviewService.getMovieReviews(id),HttpStatus.OK);
+    //특정 영화 리뷰 조회 (review list를 body로 전달)
+    @RequestMapping(value="/movie/{mid}",method = RequestMethod.GET)
+    public ResponseEntity getMovieReviews(@PathVariable Long mid){
+        return new ResponseEntity(reviewService.getReviewsByMid(mid), HttpStatus.OK);
     }
 
     //특정 member의 리뷰 조회
-    @RequestMapping(value="/member/{id}",method =RequestMethod.GET)
-    public ResponseEntity getMemberReviews(@PathVariable Long id){
-        return ResponseEntity(reviewService.getMemberReviews(id),HttpStatus.OK);
+    @RequestMapping(value="/member/{uid}",method =RequestMethod.GET)
+    public ResponseEntity getMemberReviews(@PathVariable Long uid){
+        return new ResponseEntity(reviewService.getReviewsByUid(uid),HttpStatus.OK);
     }
 
-    //내가 쓴 리뷰 조회 (이건 따로 구현할지 여부 파악...)
-    //리뷰 좋아요 기능 -> 이건 후에 ...
+    //리뷰 삭제
+    @RequestMapping(value="/delete/{rid}",method=RequestMethod.GET)
+    public ResponseEntity deleteReview(@PathVariable Long rid){
+        return new ResponseEntity(reviewService.deleteReview(rid),HttpStatus.OK);
+    }
 }
-*/

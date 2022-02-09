@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.MemberMapper">
 
+    <!--isDeleted 고려-->
     <insert id="signUp">
         INSERT INTO member (email,password,nickName)
         VALUES (#{email},#{password},#{nickName})
@@ -10,14 +11,14 @@
     <select id="getMemberToEmail" resultType="domain.MemberDTO">
         SELECT id, email, nickName, password
         FROM member
-        WHERE email=#{email}
+        WHERE email=#{email} and isDeleted=0
     </select>
 
     <select id="emailExist" resultType="Boolean">
         SELECT EXISTS(
                         SELECT id
                         FROM member
-                        WHERE email=#{email}
+                        WHERE email=#{email} and isDeleted=0
                         LIMIT 1
                    )
     </select>
@@ -26,7 +27,7 @@
         SELECT EXISTS(
                        SELECT id
                        FROM member
-                       WHERE nickName=#{nickName}
+                       WHERE nickName=#{nickName} and isDeleted=0
                        LIMIT 1
                    )
     </select>
@@ -34,26 +35,31 @@
     <select id="getIdToEmail" resultType="Long">
         SELECT id
         FROM member
-        WHERE email=#{email}
+        WHERE email=#{email} and isDeleted=0
     </select>
 
     <select id="getSalt" resultType="String">
         SELECT salt
         FROM member
-        WHERE id=#{id}
+        WHERE id=#{id} and isDeleted=0
     </select>
 
     <update id="setSalt">
         UPDATE member
         SET salt=#{salt}
-        WHERE id=#{id}
+        WHERE id=#{id} and isDeleted=0
     </update>
 
     <update id="deleteMember">
         UPDATE member
-        SET isDeleted=1
-        WHERE id=#{id}
+        SET isDeleted=1, updated_at=CURRENT_TIMESTAMP
+        WHERE id=#{id} and isDeleted=0
     </update>
 
+    <select id="getNickName" resultType="String">
+        SELECT nickName
+        FROM member
+        WHERE id=#{id} and isDeleted=0
+    </select>
 
 </mapper>

@@ -1,5 +1,4 @@
 package util;
-//토큰 발행, 검증
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -19,15 +18,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+//JWT token 발행, 검증
 @Component
 public class Jwt {
 
     @Autowired
     private MemberMapper memberMapper;
 
-    //sub(token 목적)- access/refresh
     public String createToken(Long id, String sub){
-        System.out.println("token:"+sub);
         String salt=memberMapper.getSalt(id);
 
         //header
@@ -38,20 +36,16 @@ public class Jwt {
         //payload
         Map<String, Object> payloads=new HashMap<String, Object>();
         payloads.put("id",id);
-        payloads.put("sub",sub); //토큰 제목
+        payloads.put("sub",sub);
 
         //token 만료 설정
         LocalDateTime time= LocalDateTime.now();
-        System.out.println("now:"+time);
 
         if(sub.equals("access")){
             time=time.plusDays(1);
-        }
-        //sub가 "refresh"인 경우
-        else{
+        } else{
             time=time.plusDays(14);
         }
-        System.out.println("end:"+time);
 
         Instant instant = time.atZone(ZoneId.systemDefault()).toInstant();
         Date exp=Date.from(instant);
@@ -68,40 +62,36 @@ public class Jwt {
     }
 
     //0- access token, 1- refresh token
+    //Http 헤더 AUTHORIZATION 에서 토큰 추출
     //토큰 유효성 검증
     public int isValid(String token, Integer flag) throws Exception {
         String authToken="";
         Map<String, Object> payloads=this.validateFormat(token,flag);
         String salt=memberMapper.getSalt(Long.valueOf(String.valueOf(payloads.get("id"))));
-        String sub=String.valueOf(payloads.get("sub")); //object->String
-        System.out.println("sub:"+sub);
+        String sub=String.valueOf(payloads.get("sub"));
 
-        //token String 가공 (Http Request 헤더에서 토큰 추출)
         if(token.startsWith("Bearer ")){
             authToken=token.substring(7);
         }
 
         try {
-            //jwt String에서 token 얻기
             Claims claims = Jwts.parser()
                     .setSigningKey(salt.getBytes())
                     .parseClaimsJws(authToken)
                     .getBody();
 
             //정상 반환
-            if(sub.equals("access")) return 0;
-            else return 1;
+            if(sub.equals("access")) return 0; //acess token인 경우
+            else return 1; //refresg token인 경우
         }
         catch (ExpiredJwtException e1){
             //parsing 과정에서 만료된 토큰 Exception 처리됨
-            //예외처리
             throw new Exception("parsing 과정 에러");
         }
     }
 
     //payload 반환
     public Map<String, Object> validateFormat(String token, Integer flag) throws IOException {
-        //예외처리 일단 x, 검사도 일단 x
         String[] tokenSplit=token.split("\\."); //escape
         Base64.Decoder decoder=Base64.getDecoder();
         String payloadStr=new String(decoder.decode(tokenSplit[1]));

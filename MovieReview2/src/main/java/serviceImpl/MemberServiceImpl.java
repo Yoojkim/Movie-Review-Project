@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-//withdraw 구현 안 함
-//예외처리 다시 해주기.. 일단 throw new exception으로
+//withdraw 구현
+//예외처리 -> 메시지로 보내도록 구현
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -30,7 +30,6 @@ public class MemberServiceImpl implements MemberService {
     private Jwt jwt;
 
     @Override
-    //id, password, salt 필요
     public Map<String, String> login(MemberDTO memberDTO) throws Exception {
         MemberDTO dbMember=memberMapper.getMemberToEmail(memberDTO.getEmail());
 
@@ -49,11 +48,11 @@ public class MemberServiceImpl implements MemberService {
         token.put("access",jwt.createToken(dbMember.getId(),"access"));
         token.put("refresh",jwt.createToken(dbMember.getId(), "refresh"));
 
-        return token; //token 반환(http body로)
+        return token;
     }
 
     @Override
-    //MemberDTO-> 이메일, 이름, 비밀번호
+    //email, nickName, password
     public BaseResponse signUp(MemberDTO memberDTO) throws Exception{
         //email 중복
         if(memberMapper.emailExist(memberDTO.getEmail())){
@@ -65,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
             throw new Exception("존재하는 닉네임입니다.");
         }
 
-        //암호화(memberDTO에 있는 pw 암호화됨)
+        //pw 암호화
         memberDTO.setPassword(BCrypt.hashpw(memberDTO.getPassword(), BCrypt.gensalt()));
 
         //회원가입
@@ -75,17 +74,15 @@ public class MemberServiceImpl implements MemberService {
         Long memberId=memberMapper.getIdToEmail(memberDTO.getEmail());
         memberDTO.setId(memberId);
 
-        //salt 삽입(token 발행시, 사용하기 위함) -> 보충 .. 걍근데하면안되나;
+        //jwt 발행에 필요한 salt
         String salt=BCrypt.gensalt();
-
         memberMapper.setSalt(salt,memberDTO.getId());
 
         return new BaseResponse("회원가입 성공", HttpStatus.OK);
     }
 
-    //현재 login한 id 얻기
-    //현재 jwt token(HttpserveltRequest에 있음)에서 id를 추출하고 싶음
-    private Long getLoginId() throws IOException {
+    //현재 로그인한 id 얻기
+    public Long getLoginId() throws IOException {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=req.getHeader(HttpHeaders.AUTHORIZATION);
         Map<String, Object> payloads=jwt.validateFormat(token,0); //accessToken
@@ -96,16 +93,7 @@ public class MemberServiceImpl implements MemberService {
         return id;
     }
 
-/*    @Override
-    public BaseResponse logOut() throws IOException {
-        //jwt token의 salt와 db Member의 salt를 다르게 설정
-        String salt=BCrypt.gensalt();
-        memberMapper.setSalt(salt,this.getLoginId()); //id의 salt를 다르게 설정
-        
-        return new BaseResponse("로그아웃 완료",HttpStatus.OK);
-    }*/
-
-    //탈퇴
+    //회원탈퇴
     @Override
     public BaseResponse withdraw() throws IOException {
         //현재 로그인한 아이디를 jwt 기반으로 확인한 후, 해당 회원을 탈퇴
@@ -115,15 +103,12 @@ public class MemberServiceImpl implements MemberService {
         return new BaseResponse("회원 탈퇴 완료",HttpStatus.OK);
     }
 
-    //header -> access, refresh
-    //db에 refresh token 저장해야하는지
+    //authorization header-> refresh token
     @Override
     public Map<String, String> refresh() throws Exception {
-        //현재 jwt token
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String refreshToken=req.getHeader(HttpHeaders.AUTHORIZATION);
-        System.out.println("refresh: "+refreshToken);
-        int state=jwt.isValid(refreshToken,1);
+        int state=jwt.isValid(refreshToken,1); //refresh token
         if (state==1){
             Map<String, String> token=new HashMap<>();
             token.put("access",jwt.createToken(this.getLoginId(),"access"));
@@ -131,7 +116,7 @@ public class MemberServiceImpl implements MemberService {
             return token;
         }
         else{
-            //예외처리 후에
+            //access token이 들어온 경우
             throw new Exception("토큰 잘못 들어옴");
         }
     }

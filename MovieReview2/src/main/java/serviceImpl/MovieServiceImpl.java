@@ -1,7 +1,7 @@
 package serviceImpl;
 
 import api.MovieApi;
-import domain.MovieResponseDTO;
+import domain.MovieResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ public class MovieServiceImpl implements MovieService {
     private MovieApi movieApi;
 
     @Transactional(readOnly = true)
-    public MovieResponseDTO findByKeyword(String keyword) throws Exception {
+    public MovieResponse findByKeyword(String keyword) throws Exception {
         return movieApi.requestMovie(keyword);
     }
 }

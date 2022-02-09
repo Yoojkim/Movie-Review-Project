@@ -14,4 +14,5 @@ public interface MemberMapper {
     void setSalt(@Param("salt")String salt,@Param("id")Long id);
     String getSalt(Long id);
     void deleteMember(Long id);
+    String getNickName(Long id);
 }

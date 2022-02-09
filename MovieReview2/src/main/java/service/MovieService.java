@@ -1,9 +1,7 @@
 package service;
 
-import domain.MovieResponseDTO;
-
-import java.util.List;
+import domain.MovieResponse;
 
 public interface MovieService {
-    MovieResponseDTO findByKeyword(String keyword) throws Exception;
+    MovieResponse findByKeyword(String keyword) throws Exception;
 }

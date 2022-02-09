@@ -31,12 +31,6 @@ public class MemberController {
         return new ResponseEntity(memberService.signUp(memberDTO),HttpStatus.OK);
     }
 
-    /* //로그아웃
-    @RequestMapping(value="/logout",method=RequestMethod.POST)
-    public ResponseEntity logOut() throws IOException {
-        return new ResponseEntity(memberService.logOut(),HttpStatus.OK);
-    }*/
-
     //회원탈퇴
     @RequestMapping(value="/withdraw",method =RequestMethod.POST)
     public ResponseEntity withDraw() throws IOException {
