@@ -11,4 +11,5 @@ public class ReviewDTO {
     private Long uid;
     private String nickName;
     private String review;
+    private int likes;
 }

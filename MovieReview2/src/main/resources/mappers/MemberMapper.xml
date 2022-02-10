@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.MemberMapper">
 
-    <!--isDeleted 고려-->
     <insert id="signUp">
         INSERT INTO member (email,password,nickName)
         VALUES (#{email},#{password},#{nickName})

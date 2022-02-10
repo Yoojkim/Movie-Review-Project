@@ -2,6 +2,10 @@ package serviceImpl;
 
 import com.google.common.net.HttpHeaders;
 import domain.MemberDTO;
+import errormessage.ErrorMessage;
+import exception.BaseException;
+import exception.RequestInputException;
+import exception.TokenMatchingException;
 import mapper.MemberMapper;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +34,17 @@ public class MemberServiceImpl implements MemberService {
     private Jwt jwt;
 
     @Override
-    public Map<String, String> login(MemberDTO memberDTO) throws Exception {
+    public Map<String, String> login(MemberDTO memberDTO) throws BaseException {
         MemberDTO dbMember=memberMapper.getMemberToEmail(memberDTO.getEmail());
 
         //해당 회원이 없는 경우(Email 기반)
         if(dbMember==null){
-            throw new Exception("해당 회원이 존재하지 않습니다.");
+            throw new RequestInputException(ErrorMessage.INVALID_USER_EXCEPTION);
         }
 
         //password 다른 경우
         if(!BCrypt.checkpw(memberDTO.getPassword(),dbMember.getPassword())){
-            throw new Exception("비밀번호가 다릅니다.");
+            throw new RequestInputException(ErrorMessage.INVALID_PW_EXCEPTION);
         }
 
         //refresh, access token 발행
@@ -53,15 +57,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     //email, nickName, password
-    public BaseResponse signUp(MemberDTO memberDTO) throws Exception{
+    public BaseResponse signUp(MemberDTO memberDTO) throws BaseException{
         //email 중복
         if(memberMapper.emailExist(memberDTO.getEmail())){
-            throw new Exception("존재하는 이메일입니다.");
+            throw new RequestInputException(ErrorMessage.ALREADY_AUTHORIZED_EMAIL);
         }
 
         //닉네임 중복
         if(memberMapper.nickNameExist(memberDTO.getNickName())){
-            throw new Exception("존재하는 닉네임입니다.");
+            throw new RequestInputException(ErrorMessage.ALREADY_USED_NICKNAME);
         }
 
         //pw 암호화
@@ -82,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     //현재 로그인한 id 얻기
-    public Long getLoginId() throws IOException {
+    public Long getLoginId() throws BaseException, IOException {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String token=req.getHeader(HttpHeaders.AUTHORIZATION);
         Map<String, Object> payloads=jwt.validateFormat(token,0); //accessToken
@@ -94,8 +98,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     //회원탈퇴
+    //회원 탈퇴 시 토큰여부?
     @Override
-    public BaseResponse withdraw() throws IOException {
+    public BaseResponse withdraw() throws BaseException, IOException {
         //현재 로그인한 아이디를 jwt 기반으로 확인한 후, 해당 회원을 탈퇴
         Long id=this.getLoginId();
         memberMapper.deleteMember(id);
@@ -105,7 +110,7 @@ public class MemberServiceImpl implements MemberService {
 
     //authorization header-> refresh token
     @Override
-    public Map<String, String> refresh() throws Exception {
+    public Map<String, String> refresh() throws BaseException, IOException {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String refreshToken=req.getHeader(HttpHeaders.AUTHORIZATION);
         int state=jwt.isValid(refreshToken,1); //refresh token
@@ -117,7 +122,7 @@ public class MemberServiceImpl implements MemberService {
         }
         else{
             //access token이 들어온 경우
-            throw new Exception("토큰 잘못 들어옴");
+            throw new TokenMatchingException(ErrorMessage.NOT_REFRESHTOKEN);
         }
     }
 }

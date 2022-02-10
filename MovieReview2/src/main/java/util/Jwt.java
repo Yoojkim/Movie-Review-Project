@@ -1,6 +1,10 @@
 package util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import errormessage.ErrorMessage;
+import exception.AccessTokenExpiredException;
+import exception.BaseException;
+import exception.RefreshTokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -64,7 +68,7 @@ public class Jwt {
     //0- access token, 1- refresh token
     //Http 헤더 AUTHORIZATION 에서 토큰 추출
     //토큰 유효성 검증
-    public int isValid(String token, Integer flag) throws Exception {
+    public int isValid(String token, Integer flag) throws BaseException, IOException {
         String authToken="";
         Map<String, Object> payloads=this.validateFormat(token,flag);
         String salt=memberMapper.getSalt(Long.valueOf(String.valueOf(payloads.get("id"))));
@@ -85,13 +89,13 @@ public class Jwt {
             else return 1; //refresg token인 경우
         }
         catch (ExpiredJwtException e1){
-            //parsing 과정에서 만료된 토큰 Exception 처리됨
-            throw new Exception("parsing 과정 에러");
+            if(flag==0) throw new AccessTokenExpiredException(ErrorMessage.EXPIRED_ACCESSTOKEN);
+            else throw new RefreshTokenExpiredException(ErrorMessage.EXPIRED_REFRESHTOKEN);
         }
     }
 
     //payload 반환
-    public Map<String, Object> validateFormat(String token, Integer flag) throws IOException {
+    public Map<String, Object> validateFormat(String token, Integer flag) throws BaseException, IOException {
         String[] tokenSplit=token.split("\\."); //escape
         Base64.Decoder decoder=Base64.getDecoder();
         String payloadStr=new String(decoder.decode(tokenSplit[1]));

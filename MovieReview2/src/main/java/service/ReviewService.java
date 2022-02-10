@@ -13,4 +13,5 @@ public interface ReviewService {
     ArrayList<ReviewDTO> getReviewsByMid(Long mid);
     ArrayList<ReviewDTO> getReviewsByUid(Long uid);
     BaseResponse deleteReview(Long rid);
+    BaseResponse likeReview(Long rid) throws Exception;
 }

@@ -1,6 +1,8 @@
 package interceptor;
 
 import com.google.common.net.HttpHeaders;
+import errormessage.ErrorMessage;
+import exception.InterceptorNotToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -23,13 +25,12 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         else{
             String token=request.getHeader(HttpHeaders.AUTHORIZATION);
             if(token !=null){
-                //토큰 유효성 검증 -> 토큰 유효성 검증 실패시, jwt에서 처리
                 jwt.isValid(token,0);
                 return true;
             }
             else{
                 //토큰이 없는 경우
-                throw new Exception("인증(access) 토큰이 존재하지 않습니다.");
+                throw new InterceptorNotToken(ErrorMessage.NULL_TOKEN);
             }
         }
     }

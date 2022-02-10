@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import service.ReviewService;
 
+import javax.xml.ws.Response;
+
 
 @RequestMapping("/reviews")
 @Controller
@@ -42,5 +44,11 @@ public class ReviewController {
     @RequestMapping(value="/delete/{rid}",method=RequestMethod.GET)
     public ResponseEntity deleteReview(@PathVariable Long rid){
         return new ResponseEntity(reviewService.deleteReview(rid),HttpStatus.OK);
+    }
+
+    //리뷰에 좋아요 달기(자기 리뷰에 좋아요 달아도 됨)
+    @RequestMapping(value="/like/{rid}",method=RequestMethod.GET)
+    public ResponseEntity likeReview(@PathVariable Long rid) throws Exception {
+        return new ResponseEntity(reviewService.likeReview(rid),HttpStatus.OK);
     }
 }

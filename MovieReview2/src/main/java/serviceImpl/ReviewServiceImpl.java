@@ -2,6 +2,7 @@ package serviceImpl;
 
 import domain.Movie;
 import domain.ReviewDTO;
+import mapper.LikeMapper;
 import mapper.MemberMapper;
 import mapper.MovieMapper;
 import mapper.ReviewMapper;
@@ -33,6 +34,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Autowired
     MemberMapper memberMapper;
 
+    @Autowired
+    LikeMapper likeMapper;
 
     @Override
     public BaseResponse createReview(Movie movie, String review) throws Exception {
@@ -53,18 +56,45 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ArrayList<ReviewDTO> getReviewsByMid(Long mid) {
-        return reviewMapper.getReviewsByMid(mid);
+        //여기서 반환할 ReviewDTO들의 likes 처리
+        ArrayList<ReviewDTO> reviews=reviewMapper.getReviewsByMid(mid);
+        for(ReviewDTO r:reviews){
+            r.setLikes(likeMapper.countLikes(r.getRid()));
+        }
+        return reviews;
     }
 
     @Override
     public ArrayList<ReviewDTO> getReviewsByUid(Long uid) {
-        return reviewMapper.getReviewsByUid(uid);
+        //여기서 반환할 ReviewDTO들의 likes 처리
+        ArrayList<ReviewDTO> reviews=reviewMapper.getReviewsByUid(uid);
+        for(ReviewDTO r:reviews){
+            r.setLikes(likeMapper.countLikes(r.getRid()));
+        }
+        return reviews;
     }
 
     @Override
     public BaseResponse deleteReview(Long rid) {
         reviewMapper.deleteReview(rid);
         return new BaseResponse("리뷰삭제 성공",HttpStatus.OK);
+    }
+
+    @Override
+    public BaseResponse likeReview(Long rid) throws Exception {
+        //좋아요 눌림 여부
+        Long uid=memberService.getLoginId();
+        boolean alreadyLike = likeMapper.likeExist(uid,rid);
+
+        if(alreadyLike){
+            //이미 좋아요가 눌러져 있으면 좋아요 취소
+            likeMapper.deleteLike(uid,rid);
+
+        }else {
+            //좋아요가 눌러져 있지 않으면 좋아요
+            likeMapper.likeReview(uid,rid);
+        }
+        return new BaseResponse("리뷰 좋아요 성공",HttpStatus.OK);
     }
 
 

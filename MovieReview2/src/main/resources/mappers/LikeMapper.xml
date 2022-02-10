@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.LikeMapper">
+
+    <select id="likeExist" resultType="Boolean">
+        SELECT EXISTS(
+                       SELECT lid
+                       FROM like
+                       WHERE rid=#{rid} and uid=#{uid}
+                       LIMIT 1
+                   )
+    </select>
+
+    <delete id="deleteLike">
+        DELETE FROM like
+        WHERE uid=#{uid} and rid=#{rid}
+    </delete>
+
+    <insert id="likeReview">
+        INSERT INTO like (uid,rid)
+        VALUES (#{uid},#{rid})
+    </insert>
+
+    <select id="countLikes">
+        SELECT count(*)
+        FROM like
+        WHERE rid=#{rid}
+    </select>
+
+
+</mapper>

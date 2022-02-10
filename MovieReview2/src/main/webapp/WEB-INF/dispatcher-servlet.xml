@@ -13,6 +13,7 @@
     <mvc:annotation-driven/>
     <context:component-scan base-package="controller"/>
     <context:component-scan base-package="swagger"/>
+    <context:component-scan base-package="exceptionHandler"/>
     <context:component-scan base-package="interceptor"/>
     
     <mvc:annotation-driven>
