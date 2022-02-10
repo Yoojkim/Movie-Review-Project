@@ -3,27 +3,27 @@
 <mapper namespace="mapper.LikeMapper">
 
     <select id="likeExist" resultType="Boolean">
+        /*여기서 에러남*/
         SELECT EXISTS(
-                       SELECT lid
-                       FROM like
+                       SELECT *
+                       FROM liketable
                        WHERE rid=#{rid} and uid=#{uid}
-                       LIMIT 1
                    )
     </select>
 
     <delete id="deleteLike">
-        DELETE FROM like
+        DELETE FROM liketable
         WHERE uid=#{uid} and rid=#{rid}
     </delete>
 
     <insert id="likeReview">
-        INSERT INTO like (uid,rid)
+        INSERT INTO liketable (uid,rid)
         VALUES (#{uid},#{rid})
     </insert>
 
-    <select id="countLikes">
+    <select id="countLikes" resultType="int">
         SELECT count(*)
-        FROM like
+        FROM liketable
         WHERE rid=#{rid}
     </select>
 

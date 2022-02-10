@@ -90,11 +90,14 @@ public class ReviewServiceImpl implements ReviewService {
             //이미 좋아요가 눌러져 있으면 좋아요 취소
             likeMapper.deleteLike(uid,rid);
 
+            return new BaseResponse("리뷰 좋아요 취소 성공",HttpStatus.OK);
+
         }else {
             //좋아요가 눌러져 있지 않으면 좋아요
             likeMapper.likeReview(uid,rid);
+
+            return new BaseResponse("리뷰 좋아요 성공",HttpStatus.OK);
         }
-        return new BaseResponse("리뷰 좋아요 성공",HttpStatus.OK);
     }
 
 

@@ -8,13 +8,13 @@
     </insert>
 
     <select id="getReviewsByMid" resultType="domain.ReviewDTO">
-        SELECT rid,mid,uid,nickName,review
+        SELECT rid,mid,uid,nickName,review,created_at
         FROM review
         WHERE isDeleted=0 and mid=#{mid}
     </select>
 
     <select id="getReviewsByUid" resultType="domain.ReviewDTO">
-        SELECT rid,mid,uid,nickName,review
+        SELECT rid,mid,uid,nickName,review,created_at
         FROM review
         WHERE isDeleted=0 and uid=#{uid}
     </select>
