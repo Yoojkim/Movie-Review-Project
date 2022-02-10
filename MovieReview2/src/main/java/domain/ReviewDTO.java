@@ -15,7 +15,7 @@ public class ReviewDTO {
     private String nickName;
     private String review;
     private int likes;
-    private ArrayList<ArrayList<CommentDTO>> comments;
+    /*private ArrayList<ArrayList<CommentDTO>> comments;*/
 
     //시간 나타내기
     private Date created_at;

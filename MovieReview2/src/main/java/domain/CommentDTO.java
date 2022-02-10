@@ -1,3 +1,4 @@
+/*
 package domain;
 
 import lombok.Getter;
@@ -20,3 +21,4 @@ public class CommentDTO {
     //댓글은 시간 나타내기로
     private Date updated_at;
 }
+*/
