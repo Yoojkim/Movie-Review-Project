@@ -2,6 +2,8 @@ package serviceImpl;
 
 import domain.Movie;
 import domain.ReviewDTO;
+import errormessage.ErrorMessage;
+import exception.RequestInputException;
 import mapper.LikeMapper;
 import mapper.MemberMapper;
 import mapper.MovieMapper;
@@ -39,6 +41,10 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public BaseResponse createReview(Movie movie, String review) throws Exception {
+        //review null
+        if(review==null)
+            throw new RequestInputException(ErrorMessage.NULL_REVIEW);
+
         //jwt로 uid 확보
         Long uid=memberService.getLoginId();
 

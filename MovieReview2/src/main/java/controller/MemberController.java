@@ -1,11 +1,13 @@
 package controller;
 
+import annotation.ValidationGroups;
 import domain.MemberDTO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,7 +32,7 @@ public class MemberController {
     //회원가입
     @ApiOperation(value="회원가입",notes="MemberDTO 객체를 받아 해당 정보로 회원가입한다.")
     @RequestMapping(value="/signup",method = RequestMethod.POST)
-    public ResponseEntity signUp(@RequestBody MemberDTO memberDTO) throws Exception {
+    public ResponseEntity signUp(@RequestBody @Validated(ValidationGroups.signUp.class) MemberDTO memberDTO) throws Exception {
         return new ResponseEntity(memberService.signUp(memberDTO),HttpStatus.OK);
     }
 

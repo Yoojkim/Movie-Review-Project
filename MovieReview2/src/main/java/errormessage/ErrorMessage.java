@@ -13,7 +13,10 @@ public enum ErrorMessage {
     NOT_REFRESHTOKEN(5,"Refresh token이 아닌 Access token이 들어왔습니다.",HttpStatus.UNAUTHORIZED),
     EXPIRED_REFRESHTOKEN(6,"Refresh token이 만료되었습니다.",HttpStatus.UNAUTHORIZED),
     EXPIRED_ACCESSTOKEN(7,"Access token이 만료되었습니다.",HttpStatus.UNAUTHORIZED),
-    NULL_TOKEN(8,"Token이 전달되지 않았습니다.",HttpStatus.UNAUTHORIZED);
+    NULL_TOKEN(8,"Token이 전달되지 않았습니다.",HttpStatus.UNAUTHORIZED),
+    VALIDATION_FAIL_EXCEPTION(9,"입력 값이 잘못되었습니다.",HttpStatus.BAD_REQUEST),
+    NULL_REVIEW(10,"리뷰가 입력되지 않았습니다.",HttpStatus.BAD_REQUEST);
+
 
     int code;
     String errorMessage;

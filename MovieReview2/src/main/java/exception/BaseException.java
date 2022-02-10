@@ -20,4 +20,11 @@ public class BaseException extends RuntimeException{
         this.httpStatus=errorMessage.getHttpStatus();
     }
 
+    public BaseException(String className,ErrorMessage errorMessage){
+        this.className=className;
+        this.errorMessage=errorMessage.getErrorMessage();
+        this.code=errorMessage.getCode();
+        this.httpStatus=errorMessage.getHttpStatus();
+    }
+
 }

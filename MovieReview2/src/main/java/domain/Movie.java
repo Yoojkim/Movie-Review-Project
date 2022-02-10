@@ -1,8 +1,10 @@
 package domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
 
+//MovieDTO 만들어서 userRating 제거하면 좋을 듯
 @Data
 public class Movie {
     @ApiParam(value = "영화 제목", required = true)
@@ -27,6 +29,7 @@ public class Movie {
     private String actor;
 
     @ApiParam(value = "영화 평점(네이버 영화)", required = false)
+    @ApiModelProperty(hidden = true)
     private float userRating;
 
 }

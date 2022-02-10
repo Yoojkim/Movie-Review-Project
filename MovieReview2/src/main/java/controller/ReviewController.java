@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import service.ReviewService;
 
@@ -21,7 +22,7 @@ public class ReviewController {
     //리뷰 작성
     @ApiOperation(value="리뷰 작성",notes="입력받은 영화 객체가 등록되어 있지 않으면 등록하고, 리뷰를 저장한다.")
     @RequestMapping(value="/write",method= RequestMethod.POST)
-    public ResponseEntity createReview(@RequestBody Movie movie,@RequestBody String review) throws Exception {
+    public ResponseEntity createReview(@RequestBody @Validated Movie movie, @RequestBody String review) throws Exception {
         return new ResponseEntity(reviewService.createReview(movie,review), HttpStatus.OK);
     }
 
