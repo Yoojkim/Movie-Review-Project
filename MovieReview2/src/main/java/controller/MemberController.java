@@ -25,7 +25,7 @@ public class MemberController {
     //로그인
     @ApiOperation(value="로그인",notes="MemberDTO 객체를 통해 로그인한다.")
     @RequestMapping(value="/login",method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody MemberDTO memberDTO) throws Exception {
+    public ResponseEntity login(@RequestBody @Validated(ValidationGroups.logIn.class) MemberDTO memberDTO) throws Exception {
         return new ResponseEntity(memberService.login(memberDTO), HttpStatus.OK);
     }
 

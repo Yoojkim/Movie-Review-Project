@@ -1,7 +1,7 @@
 package serviceImpl;
 
-import domain.Movie;
 import domain.ReviewDTO;
+import domain.MovieWrapper;
 import errormessage.ErrorMessage;
 import exception.RequestInputException;
 import mapper.LikeMapper;
@@ -40,23 +40,23 @@ public class ReviewServiceImpl implements ReviewService {
     LikeMapper likeMapper;
 
     @Override
-    public BaseResponse createReview(Movie movie, String review) throws Exception {
+    public BaseResponse createReview(MovieWrapper movieWrapper) throws Exception {
         //review null
-        if(review==null)
+        if(movieWrapper.getReview()==null)
             throw new RequestInputException(ErrorMessage.NULL_REVIEW);
 
         //jwt로 uid 확보
         Long uid=memberService.getLoginId();
 
-        if(!movieMapper.linkExist(movie.getLink())){
-            //영화 저장x
-            movieMapper.registerMovie(movie);
+        if(!movieMapper.linkExist(movieWrapper.getMovie().getLink())){
+            //영화 저장 안되어있음 -> 저장
+            movieMapper.registerMovie(movieWrapper.getMovie());
         }
 
-        Long mid= movieMapper.getMid(movie);
+        Long mid= movieMapper.getMid(movieWrapper.getMovie());
         String nickName=memberMapper.getNickName(uid);
 
-        reviewMapper.registerReview(mid,uid,nickName,review);
+        reviewMapper.registerReview(mid,uid,nickName, movieWrapper.getReview());
         return new BaseResponse("리뷰등록 성공", HttpStatus.OK);
     }
 

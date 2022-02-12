@@ -2,6 +2,7 @@ package api;
 
 import domain.MovieResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,8 +16,12 @@ public class MovieApi {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String CLIENT_ID="zjg2mq8O1qPGx5sOXfvz";
-    private final String CLIENT_SECRET="DGHfARaKRX";
+    @Value("${api.client_id}")
+    private String CLIENT_ID;
+
+    @Value("${api.client_secret}")
+    private String CLIENT_SECRET;
+
     private final String queryUrl = "https://openapi.naver.com/v1/search/movie.json?query={keyword}";
 
     public MovieResponse requestMovie(String keyword) throws Exception {

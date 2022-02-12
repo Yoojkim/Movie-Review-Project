@@ -8,5 +8,6 @@ public final class ValidationGroups {
     //public interface 이름 extends Default {};
     public interface signUp extends Default {};
     public interface logIn extends Default {};
+    public interface createMovie extends Default {};
 
 }

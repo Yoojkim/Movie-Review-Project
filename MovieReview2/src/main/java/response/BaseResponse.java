@@ -21,6 +21,7 @@ public class BaseResponse {
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
+
     public BaseResponse(String message, HttpStatus httpStatus){
         this.message = message;
         this.httpStatus = httpStatus;
