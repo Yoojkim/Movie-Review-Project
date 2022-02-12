@@ -106,5 +106,17 @@ public class ReviewServiceImpl implements ReviewService {
         }
     }
 
+    @Override
+    public BaseResponse updateReview(Long rid, String review) throws Exception {
+        if(review==null)
+            throw new RequestInputException(ErrorMessage.NULL_REVIEW);
+
+        //uid 비교 불필요 ->front에서
+
+        reviewMapper.updateReview(rid,review);
+
+        return new BaseResponse("리뷰 업데이트 성공",HttpStatus.OK);
+    }
+
 
 }

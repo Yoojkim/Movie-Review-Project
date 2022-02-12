@@ -53,4 +53,11 @@ public class ReviewController {
     public ResponseEntity likeReview(@PathVariable Long rid) throws Exception {
         return new ResponseEntity(reviewService.likeReview(rid),HttpStatus.OK);
     }
+
+    //리뷰 수정
+    @ApiOperation(value="리뷰 수정", notes="리뷰의 id를 받아 해당 리뷰를 업데이트한다.")
+    @RequestMapping(value="/update/{rid}",method=RequestMethod.POST)
+    public ResponseEntity updateReview(@PathVariable Long rid, @RequestBody String review) throws Exception {
+        return new ResponseEntity(reviewService.updateReview(rid,review),HttpStatus.OK);
+    }
 }

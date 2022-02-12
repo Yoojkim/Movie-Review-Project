@@ -13,4 +13,5 @@ public interface ReviewMapper {
     ArrayList<ReviewDTO> getReviewsByMid(@Param("mid")Long mid);
     ArrayList<ReviewDTO> getReviewsByUid(@Param("uid")Long uid);
     void deleteReview(Long rid);
+    void updateReview(@Param("rid")Long rid, @Param("review")String review);
 }

@@ -25,4 +25,10 @@
         WHERE rid=#{rid} and isDeleted=0
     </update>
 
+    <update id="updateReview">
+        UPDATE review
+        SET review=#{review}, updated_at=CURRENT_TIMESTAMP
+        WHERE rid=#{rid} and isDeleted=0
+    </update>
+
 </mapper>
